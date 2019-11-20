@@ -36,13 +36,7 @@ class ServiceProvider extends BaseServiceProvider
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'single-role');
         $this->mergeConfigFrom(__DIR__.'/../config/single-role.php', 'single-role');
-    }
 
-    /**
-     * @return void
-     */
-    public function register(): void
-    {
         $this->registerBladeDirectives();
     }
 
