@@ -20,7 +20,7 @@ class PermissionDenied extends AccessDenied
      */
     public function __construct(string $permission)
     {
-        parent::__construct(Lang::trans(
+        parent::__construct(Lang::get(
             'single-role::single-role.exceptions.permission',
             ['permission' => $permission]
         ));

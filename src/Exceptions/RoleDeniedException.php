@@ -20,7 +20,7 @@ class RoleDeniedException extends AccessDenied
      */
     public function __construct(string $role)
     {
-        parent::__construct(Lang::trans(
+        parent::__construct(Lang::get(
             'single-role::single-role.exceptions.role',
             ['role' => $role]
         ));
