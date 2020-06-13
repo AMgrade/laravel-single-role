@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace McMatters\SingleRole\Traits;
 
@@ -66,7 +66,10 @@ trait HasRole
      */
     public function scopeRole(Builder $builder, $role): Builder
     {
-        return $builder->whereIn("{$this->table}.role_id", $this->parseRoles($role));
+        return $builder->whereIn(
+            "{$this->table}.role_id",
+            $this->parseRoles($role)
+        );
     }
 
     /**
@@ -112,7 +115,10 @@ trait HasRole
                             ->first();
                 }
 
-                if ($item instanceof Model && $item->getKey() === $currentRole) {
+                if (
+                    $item instanceof Model &&
+                    $item->getKey() === $currentRole
+                ) {
                     return true;
                 }
             }
@@ -121,9 +127,11 @@ trait HasRole
         }
 
         if ($role instanceof Collection) {
-            return $role->contains(static function (Role $role) use ($currentRole) {
-                return $role->getKey() === $currentRole;
-            });
+            return $role->contains(
+                static function (Role $role) use ($currentRole) {
+                    return $role->getKey() === $currentRole;
+                }
+            );
         }
 
         return $currentRole === $role;

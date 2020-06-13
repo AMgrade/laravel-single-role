@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace McMatters\SingleRole\Exceptions;
 
@@ -20,9 +20,11 @@ class RoleDeniedException extends AccessDenied
      */
     public function __construct(string $role)
     {
-        parent::__construct(Lang::get(
-            'single-role::single-role.exceptions.role',
-            ['role' => $role]
-        ));
+        parent::__construct(
+            Lang::get(
+                'single-role::single-role.exceptions.role',
+                ['role' => $role]
+            )
+        );
     }
 }

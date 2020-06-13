@@ -9,8 +9,8 @@
     ],
     "require": {
         "php": ">=7.1",
-        "illuminate/database": "^5.8 || 6.*",
-        "illuminate/http": "^5.8 || 6.*"
+        "illuminate/database": "^5.8 || 6.* || 7.*",
+        "illuminate/http": "^5.8 || 6.* || 7.*"
     },
     "autoload": {
         "psr-4": {

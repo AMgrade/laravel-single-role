@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace McMatters\SingleRole\Traits;
 
@@ -60,29 +60,30 @@ trait HasPermission
 
     /**
      * @param mixed $permissions
-     * @param bool $all
+     * @param bool $checkAll
      *
      * @return bool
      */
-    public function hasPermissions($permissions, $all = false): bool
+    public function hasPermissions($permissions, bool $checkAll = false): bool
     {
         if (is_string($permissions)) {
-            $permissions = explode(Config::get('single-role.delimiter'), $permissions);
+            $permissions = explode(
+                Config::get('single-role.delimiter'),
+                $permissions
+            );
         }
 
         foreach ((array) $permissions as $permission) {
-            $hasPermission = $this->hasPermission($permission);
-
-            if ($hasPermission && !$all) {
-                return true;
-            }
-
-            if (!$hasPermission && $all) {
+            if ($this->hasPermission($permission)) {
+                if (!$checkAll) {
+                    return true;
+                }
+            } elseif ($checkAll) {
                 return false;
             }
         }
 
-        return $all;
+        return $checkAll;
     }
 
     /**
