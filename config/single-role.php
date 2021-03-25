@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'models' => [
-        'user' => 'App\User',
+        'user' => 'App\Models\User',
     ],
 
     'tables' => [
