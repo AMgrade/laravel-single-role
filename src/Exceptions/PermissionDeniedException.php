@@ -6,25 +6,15 @@ namespace McMatters\SingleRole\Exceptions;
 
 use Illuminate\Support\Facades\Lang;
 
-/**
- * Class PermissionDenied
- *
- * @package McMatters\SingleRole\Exceptions
- */
-class PermissionDenied extends AccessDenied
+class PermissionDeniedException extends AccessDeniedException
 {
-    /**
-     * PermissionDenied constructor.
-     *
-     * @param string $permission
-     */
     public function __construct(string $permission)
     {
         parent::__construct(
             Lang::get(
                 'single-role::single-role.exceptions.permission',
-                ['permission' => $permission]
-            )
+                ['permission' => $permission],
+            ),
         );
     }
 }

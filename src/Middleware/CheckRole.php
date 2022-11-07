@@ -10,23 +10,12 @@ use McMatters\SingleRole\Exceptions\RoleDeniedException;
 
 use const null;
 
-/**
- * Class CheckRole
- *
- * @package McMatters\SingleRole\Middleware
- */
 class CheckRole
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     * @param string $role
-     *
-     * @return mixed
-     *
      * @throws \McMatters\SingleRole\Exceptions\RoleDeniedException
      */
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next, string $role): mixed
     {
         $user = $request->user();
 

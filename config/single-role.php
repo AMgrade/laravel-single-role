@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
+
 return [
     'models' => [
-        'user' => 'App\Models\User',
+        'user' => User::class,
     ],
 
     'tables' => [

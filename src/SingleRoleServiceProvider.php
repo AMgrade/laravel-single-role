@@ -8,16 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
-/**
- * Class SingleRoleServiceProvider
- *
- * @package McMatters\SingleRole
- */
-class ServiceProvider extends BaseServiceProvider
+class SingleRoleServiceProvider extends BaseServiceProvider
 {
-    /**
-     * @return void
-     */
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
@@ -40,17 +32,18 @@ class ServiceProvider extends BaseServiceProvider
         $this->registerBladeDirectives();
     }
 
-    /**
-     * @return void
-     */
     protected function registerBladeDirectives(): void
     {
-        Blade::if('role', function ($role) {
-            return Auth::check() && Auth::user()->hasRole($role);
+        Blade::if('role', static function ($role) {
+            $user = Auth::user();
+
+            return null !== $user && $user->hasRole($role);
         });
 
-        Blade::if('permission', function ($permission) {
-            return Auth::check() && Auth::user()->hasPermissions($permission);
+        Blade::if('permission', static function ($permission) {
+            $user = Auth::user();
+
+            return null !== $user && $user->hasPermissions($permission);
         });
     }
 }

@@ -6,25 +6,15 @@ namespace McMatters\SingleRole\Exceptions;
 
 use Illuminate\Support\Facades\Lang;
 
-/**
- * Class RoleDeniedException
- *
- * @package McMatters\SingleRole\Exceptions
- */
-class RoleDeniedException extends AccessDenied
+class RoleDeniedException extends AccessDeniedException
 {
-    /**
-     * RoleDeniedException constructor.
-     *
-     * @param string $role
-     */
     public function __construct(string $role)
     {
         parent::__construct(
             Lang::get(
                 'single-role::single-role.exceptions.role',
-                ['role' => $role]
-            )
+                ['role' => $role],
+            ),
         );
     }
 }

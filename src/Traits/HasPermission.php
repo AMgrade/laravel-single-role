@@ -10,25 +10,19 @@ use Illuminate\Support\Facades\Config;
 use McMatters\SingleRole\Models\Permission;
 use McMatters\SingleRole\Models\Role;
 
-use function explode, get_class, is_numeric, is_string;
+use function explode;
+use function get_class;
+use function is_numeric;
+use function is_string;
 
-use const false, null, true;
+use const false;
+use const null;
+use const true;
 
-/**
- * Class HasPermission
- *
- * @package McMatters\SingleRole\Traits
- */
 trait HasPermission
 {
-    /**
-     * @var array
-     */
-    protected static $cachedPermissions = [];
+    protected static array $cachedPermissions = [];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -38,38 +32,29 @@ trait HasPermission
             'permission_id',
             null,
             null,
-            __FUNCTION__
+            __FUNCTION__,
         );
     }
 
-    /**
-     * @param string $permission
-     *
-     * @return bool
-     */
     public function hasPermission(string $permission): bool
     {
-        $permissions = $this->getPermissions();
-
-        return (bool) $permissions->first(static function ($item) use ($permission) {
-            return is_numeric($permission)
-                ? $item->getKey() === (int) $permission
-                : $item->getAttribute('name') === $permission;
-        });
+        return $this->getPermissions()->contains(
+            static function ($item) use ($permission) {
+                return is_numeric($permission)
+                    ? $item->getKey() === (int) $permission
+                    : $item->getAttribute('name') === $permission;
+            },
+        );
     }
 
-    /**
-     * @param mixed $permissions
-     * @param bool $checkAll
-     *
-     * @return bool
-     */
-    public function hasPermissions($permissions, bool $checkAll = false): bool
-    {
+    public function hasPermissions(
+        array|string $permissions,
+        bool $checkAll = false
+    ): bool {
         if (is_string($permissions)) {
             $permissions = explode(
                 Config::get('single-role.delimiter'),
-                $permissions
+                $permissions,
             );
         }
 
@@ -86,9 +71,6 @@ trait HasPermission
         return $checkAll;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public function getPermissions(): Collection
     {
         $class = get_class($this);
@@ -101,15 +83,8 @@ trait HasPermission
         return self::$cachedPermissions[$class][$key];
     }
 
-    /**
-     * @param mixed $id
-     * @param array $attributes
-     * @param bool $touch
-     *
-     * @return self
-     */
     public function attachPermissions(
-        $id,
+        mixed $id,
         array $attributes = [],
         bool $touch = true
     ): self {
@@ -119,13 +94,7 @@ trait HasPermission
         return $this;
     }
 
-    /**
-     * @param mixed $ids
-     * @param bool $touch
-     *
-     * @return self
-     */
-    public function detachPermissions($ids = null, bool $touch = true): self
+    public function detachPermissions(mixed $ids = null, bool $touch = true): self
     {
         $this->permissions()->detach($ids, $touch);
         $this->updateCachedPermissions();
@@ -133,13 +102,7 @@ trait HasPermission
         return $this;
     }
 
-    /**
-     * @param mixed $ids
-     * @param bool $detaching
-     *
-     * @return self
-     */
-    public function syncPermissions($ids, bool $detaching = true): self
+    public function syncPermissions(mixed $ids, bool $detaching = true): self
     {
         $this->permissions()->sync($ids, $detaching);
         $this->updateCachedPermissions();
@@ -147,9 +110,6 @@ trait HasPermission
         return $this;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     protected function getAllPermissions(): Collection
     {
         if ($this instanceof Role) {
@@ -157,36 +117,26 @@ trait HasPermission
         }
 
         /** @var \McMatters\SingleRole\Models\Role|null $role */
-        $role = $this->getAttribute('role');
-        $modelPermissions = $this->getAttribute('permissions');
+        $role = $this->getRelationValue('role');
+        $modelPermissions = $this->getRelationValue('permissions');
 
         if (null !== $role) {
             return $modelPermissions->merge(
-                $role->getAttribute('permissions')
+                $role->getRelationValue('permissions'),
             );
         }
 
         return new Collection();
     }
 
-    /**
-     * @param string $class
-     * @param int|string $key
-     * @param \Illuminate\Support\Collection $permissions
-     *
-     * @return void
-     */
     protected function setCachedPermissions(
         string $class,
-        $key,
+        int|string $key,
         Collection $permissions
     ): void {
         self::$cachedPermissions[$class][$key] = $permissions;
     }
 
-    /**
-     * @return void
-     */
     protected function updateCachedPermissions(): void
     {
         $class = get_class($this);

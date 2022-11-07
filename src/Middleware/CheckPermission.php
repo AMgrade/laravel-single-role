@@ -6,27 +6,16 @@ namespace McMatters\SingleRole\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use McMatters\SingleRole\Exceptions\PermissionDenied;
+use McMatters\SingleRole\Exceptions\PermissionDeniedException;
 
 use const null;
 
-/**
- * Class CheckPermission
- *
- * @package McMatters\SingleRole\Middleware
- */
 class CheckPermission
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     * @param string $permission
-     *
-     * @return mixed
-     *
-     * @throws \McMatters\SingleRole\Exceptions\PermissionDenied
+     * @throws \McMatters\SingleRole\Exceptions\PermissionDeniedException
      */
-    public function handle(Request $request, Closure $next, string $permission)
+    public function handle(Request $request, Closure $next, string $permission): mixed
     {
         $user = $request->user();
 
@@ -34,6 +23,6 @@ class CheckPermission
             return $next($request);
         }
 
-        throw new PermissionDenied($permission);
+        throw new PermissionDeniedException($permission);
     }
 }

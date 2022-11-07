@@ -7,27 +7,15 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Class CreatePermissionUserPivotTable
- */
-class CreatePermissionUserPivotTable extends Migration
+return new class extends Migration
 {
-    /**
-     * @var string
-     */
-    protected $table;
+    protected string $table;
 
-    /**
-     * CreatePermissionUserPivotTable constructor.
-     */
     public function __construct()
     {
         $this->table = Config::get('single-role.tables.permission_user');
     }
 
-    /**
-     * @return void
-     */
     public function up(): void
     {
         Schema::create($this->table, function (Blueprint $table) {
@@ -46,11 +34,8 @@ class CreatePermissionUserPivotTable extends Migration
         });
     }
 
-    /**
-     * @return void
-     */
     public function down(): void
     {
         Schema::dropIfExists($this->table);
     }
-}
+};
