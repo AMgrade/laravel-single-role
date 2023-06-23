@@ -2,24 +2,29 @@
 
 declare(strict_types=1);
 
-namespace McMatters\SingleRole\Middleware;
+namespace AMgrade\SingleRole\Middleware;
 
+use AMgrade\SingleRole\Exceptions\RoleDeniedException;
+use AMgrade\SingleRole\Services\SingleRoleService;
 use Closure;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request;
-use McMatters\SingleRole\Exceptions\RoleDeniedException;
-
-use const null;
 
 class CheckRole
 {
     /**
-     * @throws \McMatters\SingleRole\Exceptions\RoleDeniedException
+     * @throws \AMgrade\SingleRole\Exceptions\RoleDeniedException
      */
-    public function handle(Request $request, Closure $next, string $role): mixed
-    {
-        $user = $request->user();
+    public function handle(
+        Request $request,
+        Closure $next,
+        string $role,
+        ...$guards
+    ): mixed {
+        /** @var \AMgrade\SingleRole\Services\SingleRoleService $service */
+        $service = Container::getInstance()->make(SingleRoleService::class);
 
-        if (null !== $user && $user->hasRole($role)) {
+        if ($service->hasRole($role, $request, $guards)) {
             return $next($request);
         }
 

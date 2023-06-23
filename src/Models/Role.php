@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace McMatters\SingleRole\Models;
+namespace AMgrade\SingleRole\Models;
 
+use AMgrade\SingleRole\Traits\HasPermission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
-use McMatters\SingleRole\Traits\HasPermission;
 
 use const false;
 

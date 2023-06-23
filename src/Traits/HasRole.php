@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace McMatters\SingleRole\Traits;
+namespace AMgrade\SingleRole\Traits;
 
+use AMgrade\SingleRole\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
-use McMatters\SingleRole\Models\Role;
 
 use function array_merge;
 use function explode;
@@ -55,6 +55,11 @@ trait HasRole
     public function hasRole(mixed $role): bool
     {
         $currentRole = $this->getAttribute('role_id');
+
+        if (null === $currentRole) {
+            return false;
+        }
+
         $delimiter = Config::get('single-role.delimiter');
 
         if (!is_numeric($role) && is_string($role)) {
@@ -65,10 +70,9 @@ trait HasRole
             if (str_contains($role, $delimiter)) {
                 $role = explode($delimiter, $role);
             } else {
-                /** @var \McMatters\SingleRole\Models\Role $roleModel */
                 $roleModel = Role::query()->where('name', $role)->first();
 
-                if (null === $roleModel) {
+                if (!$roleModel instanceof Role) {
                     return false;
                 }
 
@@ -85,9 +89,13 @@ trait HasRole
                 }
 
                 if (is_string($item)) {
-                    $item = self::$cachedRoles[$item] ?? Role::query()
-                        ->where('name', $item)
-                        ->first();
+                    if (!isset(self::$cachedRoles[$item])) {
+                        self::$cachedRoles[$item] = Role::query()
+                            ->where('name', $item)
+                            ->first();
+                    }
+
+                    $item = self::$cachedRoles[$item];
                 }
 
                 if (

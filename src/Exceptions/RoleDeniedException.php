@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace McMatters\SingleRole\Exceptions;
+namespace AMgrade\SingleRole\Exceptions;
 
 use Illuminate\Support\Facades\Lang;
 

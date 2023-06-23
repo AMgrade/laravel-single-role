@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace McMatters\SingleRole\Traits;
+namespace AMgrade\SingleRole\Traits;
 
+use AMgrade\SingleRole\Models\Permission;
+use AMgrade\SingleRole\Models\Role;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
-use McMatters\SingleRole\Models\Permission;
-use McMatters\SingleRole\Models\Role;
 
 use function explode;
 use function get_class;
@@ -116,7 +116,7 @@ trait HasPermission
             return $this->getAttribute('permissions');
         }
 
-        /** @var \McMatters\SingleRole\Models\Role|null $role */
+        /** @var \AMgrade\SingleRole\Models\Role|null $role */
         $role = $this->getRelationValue('role');
         $modelPermissions = $this->getRelationValue('permissions');
 

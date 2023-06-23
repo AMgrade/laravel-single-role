@@ -2,24 +2,29 @@
 
 declare(strict_types=1);
 
-namespace McMatters\SingleRole\Middleware;
+namespace AMgrade\SingleRole\Middleware;
 
+use AMgrade\SingleRole\Exceptions\PermissionDeniedException;
+use AMgrade\SingleRole\Services\SingleRoleService;
 use Closure;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request;
-use McMatters\SingleRole\Exceptions\PermissionDeniedException;
-
-use const null;
 
 class CheckPermission
 {
     /**
-     * @throws \McMatters\SingleRole\Exceptions\PermissionDeniedException
+     * @throws \AMgrade\SingleRole\Exceptions\PermissionDeniedException
      */
-    public function handle(Request $request, Closure $next, string $permission): mixed
-    {
-        $user = $request->user();
+    public function handle(
+        Request $request,
+        Closure $next,
+        string $permission,
+        ...$guards
+    ): mixed {
+        /** @var \AMgrade\SingleRole\Services\SingleRoleService $service */
+        $service = Container::getInstance()->make(SingleRoleService::class);
 
-        if (null !== $user && $user->hasPermissions($permission)) {
+        if ($service->hasPermission($permission, $request, $guards)) {
             return $next($request);
         }
 
