@@ -49,7 +49,7 @@ trait HasPermission
 
     public function hasPermissions(
         array|string $permissions,
-        bool $checkAll = false
+        bool $checkAll = false,
     ): bool {
         if (is_string($permissions)) {
             $permissions = explode(
@@ -86,7 +86,7 @@ trait HasPermission
     public function attachPermissions(
         mixed $id,
         array $attributes = [],
-        bool $touch = true
+        bool $touch = true,
     ): self {
         $this->permissions()->attach($id, $attributes, $touch);
         $this->updateCachedPermissions();
@@ -113,7 +113,7 @@ trait HasPermission
     protected function getAllPermissions(): Collection
     {
         if ($this instanceof Role) {
-            return $this->getAttribute('permissions');
+            return $this->getRelationValue('permissions');
         }
 
         /** @var \AMgrade\SingleRole\Models\Role|null $role */
@@ -132,7 +132,7 @@ trait HasPermission
     protected function setCachedPermissions(
         string $class,
         int|string $key,
-        Collection $permissions
+        Collection $permissions,
     ): void {
         self::$cachedPermissions[$class][$key] = $permissions;
     }

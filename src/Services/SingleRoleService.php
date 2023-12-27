@@ -12,7 +12,7 @@ class SingleRoleService
     public function hasRole(
         string $role,
         ?Request $request = null,
-        array $guards = []
+        array $guards = [],
     ): bool {
         return $this->has($role, 'hasRole', $request, $guards);
     }
@@ -20,7 +20,7 @@ class SingleRoleService
     public function hasPermission(
         string $permission,
         ?Request $request = null,
-        array $guards = []
+        array $guards = [],
     ): bool {
         return $this->has($permission, 'hasPermissions', $request, $guards);
     }
@@ -29,7 +29,7 @@ class SingleRoleService
         string $ability,
         string $method,
         ?Request $request = null,
-        array $guards = []
+        array $guards = [],
     ): bool {
         $guards = empty($guards) ? [null] : $guards;
         $request ??= Container::getInstance()->make('request');

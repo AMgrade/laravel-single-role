@@ -184,7 +184,11 @@ trait HasRole
         if (!empty($roleNames)) {
             $roleIds = array_merge(
                 $roleIds,
-                Role::query()->whereIn('name', $roleNames)->pluck('id')->all(),
+                Role::query()
+                    ->whereIn('name', $roleNames)
+                    ->toBase()
+                    ->pluck('id')
+                    ->all(),
             );
         }
 
